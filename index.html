@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Creeper Avı</title>
+<link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="home">
+  <h1>CREEPER AVI</h1>
+  <div class="logo" id="logo"></div>
+  <p>Rekor: <b id="hbs">0</b></p>
+  <button id="play">OYNA</button>
+  <button id="how" class="alt">NASIL OYNANIR</button>
+  <div id="howto" hidden>Creeper'lar patlamadan tıkla (+1).<br>Altın creeper +5, zombi 2 vuruş (+3).<br>Elmas can verir.<br>TNT'ye basma, creeper kaçırma!<br>Üst üste vur, kombo yap.</div>
+</div>
+<div id="app" hidden>
+  <h1>CREEPER AVI</h1>
+  <div id="hud"><span>SKOR <b id="sc">0</b></span><span id="lives">♥♥♥</span><span>REKOR <b id="bs">0</b></span></div>
+  <div id="combo"></div>
+  <div id="shake"><div id="board"></div></div>
+  <div class="legend"><span>Yeşil +1</span><span style="color:var(--gold)">Altın +5</span><span style="color:#7fc9b5">Zombi 2 vuruş +3</span><span style="color:#3de0e0">Elmas +can</span><span style="color:var(--tnt)">TNT'ye dokunma!</span></div>
+</div>
+<script src="js/game.js"></script>
+</body>
+</html>
