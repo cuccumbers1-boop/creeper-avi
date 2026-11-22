@@ -4,25 +4,42 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Creeper Avı</title>
+<meta name="description" content="Creeper'lar patlamadan vur! Tarayıcıda ücretsiz Minecraft tarzı refleks oyunu.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Crect width='8' height='8' fill='%235cc44a'/%3E%3Cg fill='%2312310c'%3E%3Crect x='1' y='1' width='2' height='2'/%3E%3Crect x='5' y='1' width='2' height='2'/%3E%3Crect x='3' y='3' width='2' height='2'/%3E%3Crect x='2' y='4' width='1' height='3'/%3E%3Crect x='5' y='4' width='1' height='3'/%3E%3C/g%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div id="home">
-  <h1>CREEPER AVI</h1>
+<div id="bg" aria-hidden="true"></div>
+
+<main id="home" class="screen">
   <div class="logo" id="logo"></div>
-  <p>Rekor: <b id="hbs">0</b></p>
-  <button id="play">OYNA</button>
-  <button id="how" class="alt">NASIL OYNANIR</button>
-  <div id="howto" hidden>Creeper'lar patlamadan tıkla (+1).<br>Altın creeper +5, zombi 2 vuruş (+3).<br>Elmas can verir.<br>TNT'ye basma, creeper kaçırma!<br>Üst üste vur, kombo yap.</div>
-</div>
-<div id="app" hidden>
   <h1>CREEPER AVI</h1>
-  <div id="hud"><span>SKOR <b id="sc">0</b></span><span id="lives">♥♥♥</span><span>REKOR <b id="bs">0</b></span></div>
+  <p class="sub">Patlamadan vur, kombo yap, rekorunu kır!</p>
+  <div class="modes" id="modes">
+    <button class="mode" data-m="easy">KOLAY<span id="b-easy">0</span></button>
+    <button class="mode" data-m="normal">NORMAL<span id="b-normal">0</span></button>
+    <button class="mode" data-m="hard">ZOR<span id="b-hard">0</span></button>
+  </div>
+  <button id="play" class="big">OYNA</button>
+  <button id="how" class="alt">NASIL OYNANIR</button>
+  <div id="howto" hidden></div>
+  <button id="snd" class="alt small">SES: AÇIK</button>
+  <p class="foot">Toplam oyun: <b id="games">0</b></p>
+</main>
+
+<main id="app" class="screen" hidden>
+  <div id="hud">
+    <span>SKOR <b id="sc">0</b></span>
+    <span id="lives">♥♥♥</span>
+    <span>REKOR <b id="bs">0</b></span>
+    <button id="pause" class="alt tiny" aria-label="Duraklat">II</button>
+  </div>
   <div id="combo"></div>
   <div id="shake"><div id="board"></div></div>
-  <div class="legend"><span>Yeşil +1</span><span style="color:var(--gold)">Altın +5</span><span style="color:#7fc9b5">Zombi 2 vuruş +3</span><span style="color:#3de0e0">Elmas +can</span><span style="color:var(--tnt)">TNT'ye dokunma!</span></div>
-</div>
+  <div class="legend"><span>Yeşil +1</span><span class="g">Altın +5</span><span class="z">Zombi 2 vuruş</span><span class="d">Elmas +can</span><span class="i">Buz yavaşlatır</span><span class="r">TNT'ye dokunma!</span></div>
+</main>
+
 <script src="js/game.js"></script>
 </body>
 </html>
