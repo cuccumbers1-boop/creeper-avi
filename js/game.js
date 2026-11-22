@@ -66,6 +66,11 @@ for(let i=0;i<9;i++){
   board.appendChild(el);cells.push(c);
 }
 const ov=document.createElement('div');ov.id='ov';ov.hidden=true;board.appendChild(ov);
+const bn=document.createElement('div');bn.id='bn';board.appendChild(bn);
+let rec=false,ms=50,seen={};try{seen=JSON.parse(store.get('creeper_seen','{}'))||{}}catch(e){}
+function announce(t,col,sub){bn.innerHTML=t+(sub?'<small>'+sub+'</small>':'');bn.style.color=col;bn.classList.remove('show');void bn.offsetWidth;bn.classList.add('show')}
+const INTRO={zombie:['ZOMBİ GELDİ!','2 vuruş ister','#7fc9b5'],tnt:['TNT!','Dokunma, can gider','#d8362b'],gold:['ALTIN CREEPER!','+5 puan','#f2c230'],diamond:['ELMAS!','Vur, +1 can kazan','#3de0e0'],ice:['BUZ!','Vur, her şey yavaşlar','#7fe3ff']};
+function intro(t){const i=INTRO[t];if(!i||seen[t])return;seen[t]=1;store.set('creeper_seen',JSON.stringify(seen));announce(i[0],i[2],i[1])}
 
 function pop(c,txt,col){const p=document.createElement('div');p.className='pop';p.textContent=txt;p.style.color=col;c.el.appendChild(p);setTimeout(()=>p.remove(),500)}
 function burst(c,col){for(let i=0;i<7;i++){const p=document.createElement('i');p.className='pt';p.style.background=col;
@@ -81,7 +86,7 @@ function hud(){
 function clear(c){c.type=null;c.el.classList.remove('up');const m=c.mob;setTimeout(()=>{if(!c.type)m.innerHTML=''},110)}
 function hurt(){
   lives--;combo=0;const s=$('shake');s.classList.remove('s');void s.offsetWidth;s.classList.add('s');
-  beep(110,.25,'sawtooth');hud();if(lives<=0)end();
+  beep(110,.25,'sawtooth');hud();if(lives===1)announce('SON CAN!',COL.tnt,'Dikkat et');if(lives<=0)end();
 }
 function hit(c){
   if(!run||paused||!c.type)return;
@@ -89,9 +94,9 @@ function hit(c){
   if(t==='zombie'&&--c.hp>0){pop(c,'AH!','#9fe');burst(c,COL.zombie);beep(260,.06);return}
   clear(c);burst(c,COL[t]);
   if(t==='tnt'){c.el.classList.add('boom');setTimeout(()=>c.el.classList.remove('boom'),200);pop(c,'BOOM','#fff');hurt();return}
-  if(t==='diamond'){lives=Math.min(3,lives+1);pop(c,'+CAN',COL.diamond);beep(1000,.15,'triangle');hud();return}
-  if(t==='ice'){freezeUntil=clock+5000;pop(c,'BUZ!',COL.ice);beep(700,.2,'triangle');hud();return}
-  combo++;const pts=(t==='gold'?5:t==='zombie'?3:1)+Math.floor(combo/5);score+=pts;
+  if(t==='diamond'){lives=Math.min(3,lives+1);pop(c,'+CAN',COL.diamond);announce('+1 CAN',COL.diamond);beep(1000,.15,'triangle');hud();return}
+  if(t==='ice'){freezeUntil=clock+5000;pop(c,'BUZ!',COL.ice);announce('BUZ!',COL.ice,'5 saniye yavaş');beep(700,.2,'triangle');hud();return}
+  combo++;if(combo%5===0)announce('KOMBO x'+combo,COL.gold);const pts=(t==='gold'?5:t==='zombie'?3:1)+Math.floor(combo/5);score+=pts;if(best>0&&score>best&&!rec){rec=true;announce('YENİ REKOR!',COL.gold,'Rekoru geçtin')}else if(score>=ms){ms+=50;announce('HIZLANIYOR!',COL.tnt)}
   c.el.classList.add('hit');setTimeout(()=>c.el.classList.remove('hit'),120);
   pop(c,'+'+pts,t==='gold'?COL.gold:'#fff');beep(t==='gold'?880:420+Math.min(combo,20)*20,.07);hud();
 }
@@ -107,7 +112,7 @@ function pick(){
 function spawn(){
   const free=cells.filter(c=>!c.type);if(!free.length)return;
   const c=free[Math.floor(Math.random()*free.length)],t=pick(),frozen=clock<freezeUntil;
-  c.type=t;c.hp=2;c.mob.innerHTML=px(t);void c.el.offsetWidth;c.el.classList.add('up');
+  c.type=t;c.hp=2;intro(t);c.mob.innerHTML=px(t);void c.el.offsetWidth;c.el.classList.add('up');
   const m=t==='gold'?.8:t==='zombie'?1.4:(t==='diamond'||t==='ice')?1.1:1;
   c.exp=clock+Math.max(M.lifeMin,M.life0-score*M.lk)*m*(frozen?1.6:1);
 }
@@ -139,7 +144,7 @@ function end(){
 function start(){
   M=MODES[mode];best=+store.get('creeper_best_'+mode,'0');$('bs').textContent=best;
   cells.forEach(c=>{c.type=null;c.el.classList.remove('up');c.mob.innerHTML=''});
-  score=0;lives=3;combo=0;clock=0;freezeUntil=0;nextSpawn=500;last=null;paused=false;lastCombo='';
+  score=0;lives=3;combo=0;clock=0;rec=false;ms=50;bn.classList.remove('show');freezeUntil=0;nextSpawn=500;last=null;paused=false;lastCombo='';
   ov.hidden=true;run=true;hud();cancelAnimationFrame(raf);raf=requestAnimationFrame(frame);beep(520,.1);
 }
 function setPause(p){
